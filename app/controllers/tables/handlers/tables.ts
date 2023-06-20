@@ -19,6 +19,11 @@ export default async function (
   }>,
   reply: FastifyReply
 ) {
+  // If page above max int32
+  if (request.params.page > 2147483647) {
+    return reply.badRequest();
+  }
+
   const host = request.headers.host;
   if (!host) {
     return reply.badRequest();
@@ -44,6 +49,7 @@ export default async function (
       totalPages: Math.ceil(countRows / 10),
       itemsTotal: countRows,
       itemOnPage: tables.length,
+      timeOfRequest: this.currentDate().toString(),
     },
   });
 }
