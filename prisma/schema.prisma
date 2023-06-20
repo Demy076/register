@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model order_products {
+  id         Int       @id @default(autoincrement())
+  created_at DateTime? @default(now())
+  updated_at DateTime? @updatedAt
+  order_id   Int?
+  product_id Int?
+  amount     Int?
+  price      Float?
+  total      Float?
+  products   products? @relation(fields: [product_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_order_products_product")
+  orders     orders?   @relation(fields: [order_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_orders_products")
+
+  @@index([product_id], map: "fk_order_products_product")
+  @@index([order_id], map: "fk_orders_products")
+}
+
+model orders {
+  id             Int              @id @default(autoincrement())
+  created_at     DateTime?        @default(now())
+  updated_at     DateTime?        @updatedAt
+  table_id       Int?
+  total          Float?
+  paid           Boolean?
+  completed      Boolean?
+  order_products order_products[]
+  tables         tables?          @relation(fields: [table_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_tables_orders")
+
+  @@index([table_id], map: "fk_tables_orders")
+}
+
+model products {
+  id             Int              @id @default(autoincrement())
+  name           String?          @db.LongText
+  description    String?          @db.LongText
+  price          Float?
+  active         Boolean?
+  created_at     DateTime?        @default(now())
+  updated_at     DateTime?        @updatedAt
+  order_products order_products[]
+}
+
+model tables {
+  id           Int       @id @default(autoincrement())
+  created_at   DateTime? @default(now())
+  updated_at   DateTime? @updatedAt
+  table_number Int?      @unique(map: "table_number")
+  active       Boolean?  @default(true)
+  orders       orders[]
+
+  @@index([table_number], map: "idx_tables_table_number")
+}
