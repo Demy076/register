@@ -39,7 +39,7 @@ model orders {
 
 model products {
   id             Int              @id @default(autoincrement())
-  name           String?          @db.LongText
+  name           String           @unique
   description    String?          @db.LongText
   price          Float?
   active         Boolean?

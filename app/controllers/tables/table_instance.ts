@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import tables from "./handlers/tables";
 import createTable from "./handlers/createTable";
 import deleteTable from "./handlers/deleteTable";
+import alterTable from "./handlers/alterTable";
 
 export default async function (server: FastifyInstance) {
   server.get(
@@ -48,5 +49,17 @@ export default async function (server: FastifyInstance) {
       },
     },
     deleteTable
+  );
+  server.put(
+    "/:tableNumber",
+    {
+      schema: {
+        params: {
+          type: "object",
+          required: ["tableNumber"],
+        },
+      },
+    },
+    alterTable
   );
 }

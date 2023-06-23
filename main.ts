@@ -19,6 +19,9 @@ declare module "fastify" {
       .register(import("./app/controllers/tables/table_instance"), {
         prefix: "/tables",
       })
+      .register(import("./app/controllers/orders/order_instance"), {
+        prefix: "/orders",
+      })
       .register(import("./app/controllers/wss/socket"), {
         prefix: "/wss",
       })
