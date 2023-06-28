@@ -38,7 +38,7 @@ export default async function (
       (orderProduct) => orderProduct.product_id === product.id
     );
     if (!orderProduct) return acc;
-    return acc + product.price! * orderProduct.quantity;
+    return acc + +product.price! * orderProduct.quantity;
   }, 0);
   if (totalPrice === 0) return reply.badRequest("Could not determine price");
   const order = await this.prisma.orders.create({
@@ -55,7 +55,10 @@ export default async function (
             return {
               amount: orderProduct.quantity,
               price: foundProduct!.price!,
-              total: foundProduct!.price! * orderProduct.quantity,
+              total:
+                +foundProduct!.price! *
+                parseFloat(orderProduct.quantity.toFixed(2)),
+              product_id: orderProduct.product_id,
             };
           }),
           skipDuplicates: true,

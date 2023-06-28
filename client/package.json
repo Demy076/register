@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "@lit-labs/task": "^2.1.2",
+    "@vaadin/router": "^1.7.5",
+    "axios": "^1.4.0",
+    "lit": "^2.7.5",
+    "lit-element": "^3.3.2",
+    "sweetalert2": "^11.7.12",
+    "validator": "^13.9.0"
+  },
+  "devDependencies": {
+    "@types/validator": "^13.7.17"
+  }
+}

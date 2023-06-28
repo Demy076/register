@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "ES2020",
+    "moduleResolution": "Node",
+    // "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    // "sourceMap": true,
+    "experimentalDecorators": true
+  },
+  "include": ["./**/*.ts", "client/index.html;"],
+  "exclude": ["node_modules", "**/node_modules/*"]
+}

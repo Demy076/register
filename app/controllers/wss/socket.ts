@@ -9,7 +9,7 @@ export default async function (server: FastifyInstance) {
     }
   );
   server.get(
-    "/retailer",
+    "/staff",
     { websocket: true },
     async function (connection, request) {
       connection.on("customerMessage", (message: string) => {

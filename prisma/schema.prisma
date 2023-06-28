@@ -24,15 +24,16 @@ model order_products {
 }
 
 model orders {
-  id             Int              @id @default(autoincrement())
-  created_at     DateTime?        @default(now())
-  updated_at     DateTime?        @updatedAt
-  table_id       Int?
-  total          Float?
-  paid           Boolean?
-  completed      Boolean?
-  order_products order_products[]
-  tables         tables?          @relation(fields: [table_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_tables_orders")
+  id               Int              @id @default(autoincrement())
+  created_at       DateTime?        @default(now())
+  updated_at       DateTime?        @updatedAt
+  table_id         Int?
+  total            Float?           @default(0)
+  paid             Boolean?
+  completed        Boolean?
+  requestedPayment Boolean?         @default(false)
+  order_products   order_products[]
+  tables           tables?          @relation(fields: [table_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_tables_orders")
 
   @@index([table_id], map: "fk_tables_orders")
 }
@@ -41,7 +42,7 @@ model products {
   id             Int              @id @default(autoincrement())
   name           String           @unique
   description    String?          @db.LongText
-  price          Float?
+  price          Float?           @default(0)
   active         Boolean?
   created_at     DateTime?        @default(now())
   updated_at     DateTime?        @updatedAt
@@ -49,12 +50,25 @@ model products {
 }
 
 model tables {
-  id           Int       @id @default(autoincrement())
-  created_at   DateTime? @default(now())
-  updated_at   DateTime? @updatedAt
-  table_number Int?      @unique(map: "table_number")
-  active       Boolean?  @default(true)
+  id           Int         @id @default(autoincrement())
+  created_at   DateTime?   @default(now())
+  updated_at   DateTime?   @updatedAt
+  table_number Int?        @unique(map: "table_number")
+  active       Boolean?    @default(true)
+  taken        Boolean?    @default(false)
   orders       orders[]
+  customers    customers[]
 
   @@index([table_number], map: "idx_tables_table_number")
+}
+
+model customers {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  name       String?  @db.VarChar(255)
+  email      String?  @unique @db.VarChar(255)
+  secret     String?  @db.VarChar(255)
+  table_id   Int?
+  table      tables?  @relation(fields: [table_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_customers_tables")
 }

@@ -3,6 +3,7 @@ import tables from "./handlers/tables";
 import createTable from "./handlers/createTable";
 import deleteTable from "./handlers/deleteTable";
 import alterTable from "./handlers/alterTable";
+import takeTable from "./handlers/takeTable";
 
 export default async function (server: FastifyInstance) {
   server.get(
@@ -61,5 +62,28 @@ export default async function (server: FastifyInstance) {
       },
     },
     alterTable
+  );
+  server.post(
+    "/:tableNumber/take",
+    {
+      schema: {
+        params: {
+          type: "object",
+          required: ["tableNumber"],
+          properties: {
+            tableNumber: { type: "number" },
+          },
+        },
+        body: {
+          type: "object",
+          required: ["name", "email"],
+          properties: {
+            name: { type: "string" },
+            email: { type: "string", format: "email" },
+          },
+        },
+      },
+    },
+    takeTable
   );
 }
